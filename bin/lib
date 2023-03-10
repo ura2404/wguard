@@ -1,0 +1,92 @@
+#!/bin/bash
+
+## -----------------------------------------------------------------------------
+ # Фуникция ts
+ # Вывести timstamp
+ #
+ # @param bool - true - заменить пробелы символом подчёркивание
+ #
+ # Применение
+ #   $(ts)
+ #   $(ts true)
+ #
+function ts(){
+    [ "$1" == 'true' ] && echo $(date +"%Y-%m-%d %H:%M:%S") | sed 's/:/-/g;s/ /_/g' || echo $(date +"%Y-%m-%d %H:%M:%S")
+}
+
+
+## -----------------------------------------------------------------------------
+function generate(){
+    CL_NAME=$1
+    CL_NET=$2
+    CL_IP=$3
+    CL_FOLDER=$CLIENTS/client$CL_NAME
+    CL_CONF=$CL_FOLDER/client.conf
+    SV_CONF=$CL_FOLDER/server.conf
+
+    [ -d $CL_FOLDER ] && return 1
+    mkdir -p $CL_FOLDER
+
+    sudo wg genkey | tee $CL_FOLDER/privatekey | wg pubkey | tee $CL_FOLDER/publickey > /dev/null
+
+    CL_PRIVKEY=`cat $CL_FOLDER/privatekey`
+    CL_PUBKEY=`cat $CL_FOLDER/publickey`
+
+    cat $BIN/client.conf									|
+        #sed -e 's/\$client_privatekey\$/'`echo $CL_KEY | sed -e 's/^/\//g'`'/g'		|
+        sed -e 's/\$client_name\$/'$CL_NAME'/g'							|
+        sed -e 's/\$client_net\$/'$CL_NET'/g'							|
+        sed -e 's/\$client_ip\$/'$CL_IP'/g'							|
+        awk -v KEY=$CL_PRIVKEY '{if(NR==2) print $1" "$2" "KEY; else print $0; }'		> $CL_CONF
+
+    cat $BIN/server.conf									|
+        sed -e 's/\$client_net\$/'$CL_NET'/g'							|
+        sed -e 's/\$client_ip\$/'$CL_IP'/g'							|
+        awk -v KEY=$CL_PUBKEY '{if(NR==2) print $1" "$2" "KEY; else print $0; }'		> $SV_CONF
+
+
+    return 0;
+}
+
+## -----------------------------------------------------------------------------
+function server(){
+    CL_NAME=$1
+    CL_FOLDER=$CLIENTS/client$CL_NAME
+    SV_CONF=$CL_FOLDER/server.conf
+
+    sudo cp /etc/wireguard/wg0.conf $SERVER
+    sudo chown ura:ura $SERVER/wg0.conf
+    echo ''      >> $SERVER/wg0.conf
+    cat $SV_CONF >> $SERVER/wg0.conf
+}
+
+
+## -----------------------------------------------------------------------------
+function qr(){
+    CL_NAME=$1
+    CL_FOLDER=$CLIENTS/client$CL_NAME
+    CL_CONF=$CL_FOLDER/client.conf
+
+    #cat $CLIENT_FOLDER/$CLIENT_NAME.conf
+    qrencode -t ansiutf8 < $CL_CONF
+
+    qrencode -t png -d 120 -o $CL_FOLDER/qr-client$CL_NAME.png -r $CL_CONF
+
+}
+
+## -----------------------------------------------------------------------------
+function next_client(){
+    CNT=$CLIENTS/client.cnt
+    CUR=`cat $CNT`
+    echo $CUR
+    echo $(($CUR+1)) > $CNT
+}
+
+## -----------------------------------------------------------------------------
+function next_ip(){
+    NET=$1
+    CNT=$CLIENTS/ip$NET.cnt
+    CUR=`cat $CNT`
+    echo $CUR
+    echo $(($CUR+1)) > $CNT
+}

@@ -1,0 +1,2 @@
+* * * * * sleep 10; cd ~/__WORK__/wguard; bash bin/log-timelaps.bash
+* * * * * sleep 10; cd ~/__WORK__/wguard; bash bin/log-trafic.bash

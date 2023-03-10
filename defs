@@ -1,0 +1,20 @@
+#!/bin/bash
+
+export ROOT=`pwd`
+export TMP=/var/tmp/wguard
+export CLIENTS=$ROOT/clients
+export SERVER=$ROOT/server
+export BACKUP=$ROOT/backup
+export BIN=$ROOT/bin
+
+export NET1=77
+
+mkdir -p $TMP
+mkdir -p $CLIENTS
+mkdir -p $SERVER
+mkdir -p $BACKUP
+
+[ -f $CLIENTS/client.cnt ]  || echo '1' > $CLIENTS/client.cnt
+[ -f $CLIENTS/ip$NET1.cnt ] || echo '1' > $CLIENTS/ip$NET1.cnt
+
+. bin/lib
