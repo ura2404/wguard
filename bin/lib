@@ -54,7 +54,11 @@ function server(){
     CL_FOLDER=$CLIENTS/client$CL_NAME
     SV_CONF=$CL_FOLDER/server.conf
 
-    sudo cp /etc/wireguard/wg0.conf $SERVER
+    sudo cp /etc/wireguard/wg0.conf $BACKUP/$(ts true)-wg0.conf
+    sudo chown ura:ura $BACKUP/$(ts true)-wg0.conf
+    bzip2 -z -9 $BACKUP/$(ts true)-wg0.conf
+
+    sudo cp /etc/wireguard/wg0.conf $SERVER/wg0.conf
     sudo chown ura:ura $SERVER/wg0.conf
     echo ''      >> $SERVER/wg0.conf
     cat $SV_CONF >> $SERVER/wg0.conf
@@ -66,6 +70,8 @@ function qr(){
     CL_NAME=$1
     CL_FOLDER=$CLIENTS/client$CL_NAME
     CL_CONF=$CL_FOLDER/client.conf
+
+    [ ! -d $CL_FOLDER ] &&  echo 'Client not found ' && return
 
     #cat $CLIENT_FOLDER/$CLIENT_NAME.conf
     qrencode -t ansiutf8 < $CL_CONF

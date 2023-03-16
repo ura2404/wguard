@@ -2,6 +2,8 @@
 
 . ./defs
 
+echo $TMP/$(ts true)
+
 sudo wg show | grep -P 'transfer:|allowed' | awk '
 BEGIN{buff=""}
 {

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#echo '--- Defs ---'
+
 export ROOT=`pwd`
 export TMP=/var/tmp/wguard
 export CLIENTS=$ROOT/clients
@@ -18,3 +20,5 @@ mkdir -p $BACKUP
 [ -f $CLIENTS/ip$NET1.cnt ] || echo '1' > $CLIENTS/ip$NET1.cnt
 
 . bin/lib
+
+#echo 'def tmp='$TMP

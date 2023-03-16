@@ -2,6 +2,8 @@
 
 . ./defs
 
+echo $TMP/$(ts true)
+
 sudo wg show | grep -P 'latest|allowed' | awk '
 BEGIN{buff=""}
 {
