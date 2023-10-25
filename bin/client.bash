@@ -24,11 +24,3 @@ else
     echo ''
     qr $CLIENT
 fi
-
-#echo $CLIENT $NET $IP
-
-#generate $CLIENT $NET $IP#						\
-#    && (echo 'Клиент создан'     && echo && qr $CLIENT)		\
-#    || (echo 'Клиент существует' && echo && qr $CLIENT)
-
-#next_client

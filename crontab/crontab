@@ -1,4 +1,7 @@
-* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-timelaps.bash
-* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-trafic.bash
-* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-dump.bash
-* * * * * cd ~/__WORK__/wguard; bash bin/pgpush.bash
+#* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-timelaps.bash
+#* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-trafic.bash
+
+* * * * * sleep 0; cd ~/__WORK__/wguard; bash bin/log-dump.bash
+* * * * * sleep 30; cd ~/__WORK__/wguard; bash bin/pgpush.bash
+
+5 0 * * * cd ~/__WORK__/wguard; bash bin/jumlog.bash
