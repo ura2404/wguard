@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## 
+ # Формирование log-файла 
+ #
+
 . ./defs
 
 echo $TMP/$(ts true)
