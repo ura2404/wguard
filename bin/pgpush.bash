@@ -1,6 +1,7 @@
 #!/bin/bash
 
-HOST=host.urx.su
+#HOST=host.urx.su
+HOST=172.16.0.1
 PORT=5015
 DB=wguard
 USER=wgdump
