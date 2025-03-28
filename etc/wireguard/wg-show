@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo wg show | grep -P 'late|ips|transfer' | awk '{ if($1=="allowed") print $0; else print "  ",$0; if($1=="transfer:") print "";}'
