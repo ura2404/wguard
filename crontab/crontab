@@ -1,7 +1,13 @@
-#* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-timelaps.bash
-#* * * * * sleep 45; cd ~/__WORK__/wguard; bash bin/log-trafic.bash
+MAILTO=""
+
+* * * * * sleep  0; cd ~/.urx; ./wg-prepare
+* * * * * sleep 10; cd ~/.urx; ./wg-prepare
+* * * * * sleep 20; cd ~/.urx; ./wg-prepare
+* * * * * sleep 30; cd ~/.urx; ./wg-prepare
+* * * * * sleep 40; cd ~/.urx; ./wg-prepare
+* * * * * sleep 50; cd ~/.urx; ./wg-prepare
 
 */15 * * * * sleep 0; cd ~/__WORK__/wguard; bash bin/log-dump.bash
-* * * * * sleep 30; cd ~/__WORK__/wguard; bash bin/pgpush.bash
+* * * * * sleep 15; cd ~/__WORK__/wguard; bash bin/pgpush.bash
 
 5 0 * * * cd ~/__WORK__/wguard; bash bin/jumlog.bash

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+[ -z $1 ] && I='all' || I="$1"
+[ -z $2 ] && F='0'   || F="$2"
+
+[ "$F" == "1" ] && cat ./f.0.0.0   ./f.0.1.0 > /var/tmp/wguard-f1
+[ "$F" == "2" ] && cat ./f.1.0.0-1 ./f.2.0.0 > /var/tmp/wguard-f2
+[ "$F" == "3" ] && cat ./f.1.0.0-2           > /var/tmp/wguard-f3
+[ "$F" == "4" ] && cat ./f.1.0.0-3           > /var/tmp/wguard-f4
+
+[ "$F" == "0" ] && cat /var/tmp/wgdump-$I
+[ "$F" == "1" ] && cat /var/tmp/wgdump-$I | grep -f /var/tmp/wguard-f1
+[ "$F" == "2" ] && cat /var/tmp/wgdump-$I | grep -f /var/tmp/wguard-f2
+[ "$F" == "3" ] && cat /var/tmp/wgdump-$I | grep -f /var/tmp/wguard-f3
+[ "$F" == "4" ] && cat /var/tmp/wgdump-$I | grep -f /var/tmp/wguard-f4
+
+
+exit
+
+# ------------------------------------------------------------------------------
+sudo wg show $1 | grep -P 'latest|ips' | awk '
+BEGIN{buff="123"}
+{
+    fl=0;
+    if($1=="allowed") buff=$3;
+    if($1=="latest"){
+        fl=1;
+        buff=buff" \t"$3" "$4" "$5" "$6" "$7" "$8" "$9" "$10" "$11
+    }
+    if(fl==1){
+        print buff;
+        buff="";
+    }
+}' | sed "s/\/32//1" > /var/tmp/wguard-$I-$F
+
+[ "$F" == "0" ] && cat /var/tmp/wguard-$I-0
+[ "$F" == "1" ] && cat /var/tmp/wguard-$I-1 | grep -f /var/tmp/wguard-f1
+[ "$F" == "2" ] && cat /var/tmp/wguard-$I-2 | grep -f /var/tmp/wguard-f2
+[ "$F" == "3" ] && cat /var/tmp/wguard-$I-3 | grep -f /var/tmp/wguard-f3
+
+#echo 1 | parser

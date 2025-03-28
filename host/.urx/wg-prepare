@@ -1,0 +1,3 @@
+./wg-dump
+./wg-dump wg0
+./wg-dump wg1

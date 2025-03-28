@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ps aux | egrep 'ssh-agent -s$' | awk '{ print $2 }'| while read a; do
+    kill $a
+done

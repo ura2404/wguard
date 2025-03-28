@@ -1,0 +1,3 @@
+#!/bin/bash
+
+[ -z "`ps aux | egrep 'ssh-agent -s$'`" ] && echo 0 || echo 1
